@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -17,6 +19,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -31,6 +34,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -51,7 +56,23 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
+@Composable
+fun GetUserInfo(
+    modifier:Modifier = Modifier,
+    value:String,
+    onValueChange:(String)-> Unit,
+    @DrawableRes leadingIcon: Int,
+    @StringRes label:Int
+)
+{
+    TextField(
+        onValueChange = onValueChange,
+        value = value,
+        label = {Text(stringResource(label))},
+        modifier = modifier,
+        leadingIcon  = { Icon(painter= painterResource(leadingIcon), null) }
+    )
+}
 @Composable
 fun MainAppLayout(modifier: Modifier = Modifier)
 {
@@ -69,7 +90,9 @@ fun MainAppLayout(modifier: Modifier = Modifier)
         endY = Float.POSITIVE_INFINITY
     )
 
-    Column(modifier = Modifier.fillMaxSize().background(gradientBrush), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Top) {
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .background(gradientBrush), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Top) {
         Text(
             text = "The Job Application",
             style = MaterialTheme.typography.headlineMedium,
@@ -77,34 +100,49 @@ fun MainAppLayout(modifier: Modifier = Modifier)
             color = Color.Black,
             textAlign = TextAlign.Center,
 
-            modifier = Modifier.
-                background(color = Color(0XFFC6EEF0))
+            modifier = Modifier
+                .background(color = Color(0XFFC6EEF0))
                 .fillMaxWidth()
                 .padding(vertical = 20.dp)
         )
 
         Spacer(modifier = Modifier.padding(vertical = 100.dp))
-        TextField(
+        GetUserInfo(
+            modifier = Modifier.clip(RoundedCornerShape(10.dp)),
             value = email,
             onValueChange = {email = it},
-            label = {Text("Email")},
-            modifier = Modifier
-                .clip(RoundedCornerShape(10.dp))
+            leadingIcon = R.drawable.icons8_user_48,
+            label = R.string.email_label,
         )
+//        TextField(
+//            value = email,
+//            onValueChange = {email = it},
+//            label = {Text("Email")},
+//            modifier = Modifier
+//                .clip(RoundedCornerShape(10.dp))
+//        )
         Spacer(modifier = Modifier.padding(16.dp))
-        TextField(
+        GetUserInfo(
+            modifier = Modifier.clip(RoundedCornerShape(10.dp)),
             value = password,
             onValueChange = {password = it},
-            label = {Text("Password")},
-            modifier = Modifier
-                    .clip(RoundedCornerShape(10.dp))
+            leadingIcon = R.drawable.icons8_password_48_1_,
+            label = R.string.password_label,
         )
+
+//        TextField(
+//            value = password,
+//            onValueChange = {password = it},
+//            label = {Text("Password")},
+//            modifier = Modifier
+//                    .clip(RoundedCornerShape(10.dp))
+//        )
 
 
         Spacer(modifier = Modifier.padding(16.dp))
 
         Row(modifier
-            .background(color = Color(0XFF36C2C9), shape = RoundedCornerShape(10.dp))
+//            .shape = RoundedCornerShape(10.dp)
             .clip(RoundedCornerShape(10.dp))
             .padding(vertical = 10.dp, horizontal = 20.dp) // this acts as padding when applied after background
             , Arrangement.Center)

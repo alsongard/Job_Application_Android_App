@@ -6,19 +6,28 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -34,12 +43,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import com.example.myapplication.data.DataSource
+import com.example.myapplication.model.JobInfo
 import com.example.myapplication.ui.theme.MyApplicationTheme
 
 class MainActivity : ComponentActivity() {
@@ -73,7 +87,7 @@ fun GetUserInfo(
         leadingIcon  = { Icon(painter= painterResource(leadingIcon), null) }
     )
 }
-@Composable
+@Composable // SIGNIN & SIGNOUT FORM
 fun MainAppLayout(modifier: Modifier = Modifier)
 {
     var email by remember { mutableStateOf("") }
@@ -165,14 +179,219 @@ fun MainAppLayout(modifier: Modifier = Modifier)
 @Composable
 fun MainAppPreview(modifier: Modifier = Modifier)
 {
-    MyApplicationTheme() {
+    var layoutDirection  = LocalLayoutDirection.current
+
         Surface(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(
+                    start = WindowInsets.safeDrawing.asPaddingValues()
+                        .calculateStartPadding(layoutDirection),
+                    end =  WindowInsets.safeDrawing.asPaddingValues()
+                        .calculateEndPadding(layoutDirection)
+                )
+            ,
             color = MaterialTheme.colorScheme.background
         ) {
-            MainAppLayout()
-        }
-    }
+//            MainAppLayout()
+//            JobView(modifier)
+            JobListsView(DataSource().loadJobInfo(), modifier = Modifier.fillMaxSize())
 
+        }
 }
 
+
+
+
+@Composable
+fun JobCardView(modifier: Modifier = Modifier, jobInfo: JobInfo) {
+    Card(
+        modifier = modifier,
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+    ) {
+        Column(
+            modifier = modifier
+                .padding(horizontal = 16.dp, 16.dp)
+                .fillMaxWidth()
+            ,
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            // Company Logo
+            Image(
+                painter = painterResource(jobInfo.jobCompanyLogo),
+                contentDescription = "Company Logo",
+                modifier = Modifier
+//                    .size(100.dp)
+                    .height(120.dp)
+                    .fillMaxWidth(1f)
+                    .align(Alignment.CenterHorizontally)
+                    .clip(RoundedCornerShape(8.dp)),
+                contentScale = ContentScale.Crop
+            )
+
+            // Company Name
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = "Company: ",
+                    style = MaterialTheme.typography.labelMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Text(
+                    text = stringResource(jobInfo.jobCompanyName),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+
+            // Mission
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(
+                    text = "Mission:",
+                    style = MaterialTheme.typography.labelMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Text(
+                    text = stringResource(jobInfo.jobCompanyMission),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+//
+//            // Website
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = "Website: ",
+                    style = MaterialTheme.typography.labelMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Text(
+                    text = stringResource(jobInfo.jobCompanyWebsite),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+
+            // Category
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = "Category: ",
+                    style = MaterialTheme.typography.labelMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Text(
+                    text = stringResource(jobInfo.jobCategory),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+
+            // Type
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = "Type: ",
+                    style = MaterialTheme.typography.labelMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Text(
+                    text = stringResource(jobInfo.jobType),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+
+            // Experience Level
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = "Experience: ",
+                    style = MaterialTheme.typography.labelMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Text(
+                    text = stringResource(jobInfo.jobExperience),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+
+            // Location
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = "Location: ",
+                    style = MaterialTheme.typography.labelMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Text(
+                    text = stringResource(jobInfo.jobLocation),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+
+            HorizontalDivider(
+                modifier = Modifier.padding(vertical = 8.dp),
+                color = MaterialTheme.colorScheme.outlineVariant
+            )
+
+            // Job Description
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(
+                    text = "Description:",
+                    style = MaterialTheme.typography.labelMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Text(
+                    text = stringResource(jobInfo.jobDescription),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+
+            // Requirements
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(
+                    text = "Requirements:",
+                    style = MaterialTheme.typography.labelMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                stringArrayResource(R.array.job_requirements_1).forEach { requirement ->
+                    Row(
+                        modifier = Modifier.padding(start = 8.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Text(
+                            text = "•",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                        Text(
+                            text = requirement,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                }
+            }
+            Button(onClick={/**/}, modifier.fillMaxWidth()) {
+                Text(text="Apply")
+            }
+//            Spacer(modifier.padding(vertical = 10.dp))
+        }
+    }
+}
+
+
+@Composable // this is for lazyloading
+fun JobListsView(jobInfoLists: List<JobInfo>, modifier: Modifier = Modifier)
+{
+    LazyColumn(modifier,   verticalArrangement = Arrangement.spacedBy(40.dp)) {
+        items(jobInfoLists) { job -> // if what am receiving are objects in this then to access a property of object i use dot notation: object.property
+            JobCardView(
+//                modifier = Modifier.fillMaxWidth(),
+                jobInfo = job
+            )
+
+
+        }
+    }
+}

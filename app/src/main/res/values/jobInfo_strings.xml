@@ -1,3 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="job_category_1">Software Engineering</string>
+    <string name="type_1">Full-time</string>
+    <string name="experience_level_1">Senior Level</string>
+    <string name="job_description_1">You will lead the architectural design and implementation of scalable cloud services, ensuring high performance and reliability for millions of global users.</string>
+    <string-array name="job_requirements_1">
+        <item>BS degree in Computer Science or equivalent practical experience</item>
+        <item>Experience with Java</item>
+        <item>C++</item>
+        <item>or Go</item>
+        <item>Expertise in distributed systems and microservices architecture</item>
+        <item>Proven track record of technical leadership and mentoring junior engineers</item>
+    </string-array>
+    <string name="location_1">Mountain View, CA (Hybrid)</string>
+    <string name="application_deadline_1">2026-03-15</string>
+    <string name="company_name_1">Google</string>
+    <string name="website_1">https://about.google</string>
+    <string name="mission_1">To organize the world\'s information and make it universally accessible and useful.</string>
+    <string name="logo_1">https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png</string>
+    <string name="job_category_2">Data Science</string>
+    <string name="type_2">Remote</string>
+    <string name="experience_level_2">Mid-Senior</string>
+    <string name="job_description_2">Analyze large datasets to derive actionable insights and build predictive models that drive business decisions.</string>
+    <string-array name="job_requirements_2">
+        <item>Proficiency in Python and SQL</item>
+        <item>Experience with A/B testing methodologies</item>
+        <item>Strong background in Machine Learning"</item>
+        <item>Ability to communicate complex data insights to non-technical stakeholders</item>
+    </string-array>
+    <string name="location_2">New York, NY</string>
+    <string name="application_deadline_2">2026-04-12</string>
+    <string name="company_name_2">Netflix</string>
+    <string name="website_2">https://jobs.netflix.com</string>
+    <string name="mission_2">To entertain the world with stories that move us and bring us closer together.</string>
+    <string name="logo_2">https://images.ctfassets.net/y2ske730sjwb/4biAy4Z0ih0Re0uU60YKpA/62613d5999f848d686f030232f703893/netflix-logo.png</string>
+    <string name="job_category_3">Sustainable Energy</string>
+    <string name="type_3">Contract</string>
+    <string name="experience_level_3">Entry Level</string>
+    <string name="job_description_3">Develop and implement innovative solar energy solutions to support community-driven power initiatives.</string>
+    <string-array name="job_requirements_3">
+        <item>Basic understanding of renewable energy systems</item>
+        <item>Valid driver\'s license</item>
+        <item>Strong organizational skills</item>,
+        <item>Willingness to work outdoors and engage with community members </item>
+    </string-array>
+    <string name="location_3">Austin, TX</string>
+    <string name="application_deadline_3">2026-05-01</string>
+    <string name="company_name_3">Solaris Grid </string>
+    <string name="website_3">https://solaris-grid.io</string>
+    <string name="mission_3">Decentralizing the power grid through community-driven solar initiatives.</string>
+    <string name="logo_3">https://via.placeholder.com/150/00FF00/FFFFFF?text=Solaris+Grid</string>
+    <string name="job_category_4">UX/UI Design</string>
+    <string name="type_4">Full-time</string>
+    <string name="experience_level_4">Expert</string>
+    <string name="job_description_4">Design intuitive, inclusive, and world-class digital experiences that help hosts and guests connect across different cultures and languages.</string>
+    <string-array name="job_requirements_4">
+        <item>Portfolio demonstrating mastery of visual and interaction design</item>
+        <item>Expertise in Figma or Adobe Creative Suite</item>
+        <item>Experience with design systems at scale</item>
+        <item>Knowledge of accessibility standards (WCAG)</item>
+    </string-array>
+    <string name="location_4">London, UK (Hybrid)</string>
+    <string name="application_deadline_4">2026-03-20</string>
+    <string name="company_name_4">Airbnb</string>
+    <string name="website_4">https://careers.airbnb.com</string>
+    <string name="mission_4">To create a world where anyone can belong anywhere.</string>
+    <string name="logo_4">https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Airbnb_Logo_Belo.svg/512px-Airbnb_Logo_Belo.svg.png</string>
+    <string name="job_category_5">Cybersecurity</string>
+    <string name="type_5">Part-time</string>
+    <string name="experience_level_5">Junior</string>
+    <string name="job_description_5">Monitor network traffic for anomalies and assist in the implementation of security protocols for our small-to-medium enterprise clients.</string>
+    <string-array name="job_requirements_5">
+        <item>CompTIA Security+ or equivalent certification</item>
+        <item>Familiarity with firewall configuration"</item>
+        <item>Understanding of intrusion detection systems (IDS)</item>
+        <item>Strong analytical problem-solving skills</item>
+    </string-array>
+    <string name="location_5">Berlin, Germany</string>
+    <string name="application_deadline_5">2026-06-15</string>
+    <string name="company_name_5">Neon Shield </string>
+    <string name="website_5">https://neon-shield-security.de</string>
+    <string name="mission_5">Protecting the digital frontier for small businesses in an evolving threat landscape.</string>
+    <string name="logo_5">https://via.placeholder.com/150/800080/FFFFFF?text=Neon+Shield</string>
 </resources>
+
+    <!--
+    Object 1 (Netflix - Data Science)
+
+        job_description: "You will leverage large-scale datasets to optimize content recommendation algorithms and improve subscriber retention through predictive modeling."
+
+        job_requirements: ["Proficiency in Python and SQL", "Experience with A/B testing methodologies", "Strong background in Machine Learning", "Ability to communicate complex data insights to non-technical stakeholders"]
+
+    Object 2 (Solaris Grid - Sustainable Energy)
+
+        job_description: "As a Junior Field Coordinator, you will assist in the deployment of community solar panels and manage local hardware maintenance schedules."
+
+        job_requirements: ["Basic understanding of renewable energy systems", "Valid driver's license", "Strong organizational skills", "Willingness to work outdoors and engage with community members"]
+
+    Object 3 (Airbnb - UX/UI Design)
+
+        job_description: "Design intuitive, inclusive, and world-class digital experiences that help hosts and guests connect across different cultures and languages."
+
+        job_requirements: ["Portfolio demonstrating mastery of visual and interaction design", "Expertise in Figma or Adobe Creative Suite", "Experience with design systems at scale", "Knowledge of accessibility standards (WCAG)"]
+
+    Object 4 (Neon Shield - Cybersecurity)
+
+        job_description: "Monitor network traffic for anomalies and assist in the implementation of security protocols for our small-to-medium enterprise clients."
+
+        job_requirements: ["CompTIA Security+ or equivalent certification", "Familiarity with firewall configuration", "Understanding of intrusion detection systems (IDS)", "Strong analytical problem-solving skills"]
+
+    Object 1 (Google - Software Engineering)
+
+        job_description: "You will lead the architectural design and implementation of scalable cloud services, ensuring high performance and reliability for millions of global users."
+
+        job_requirements: ["BS degree in Computer Science or equivalent practical experience", "Experience with Java, C++, or Go", "Expertise in distributed systems and microservices architecture", "Proven track record of technical leadership and mentoring junior engineers"]
+
+    -->

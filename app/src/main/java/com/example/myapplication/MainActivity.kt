@@ -20,16 +20,24 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SearchBar
+import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -37,6 +45,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -62,13 +71,52 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MyApplicationTheme {
-                Surface(modifier= Modifier.fillMaxSize(),color = MaterialTheme.colorScheme.background) {
+                Surface(modifier= Modifier.fillMaxSize())
+                {
                     MainAppLayout()
                 }
             }
         }
     }
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun JobAppTopBar(
+    textFieldStat: TextFieldState,
+    onSearch: (String)->Unit,
+    searchResults: List<String>,
+    modifier: Modifier = Modifier
+)
+{
+    var expanded by rememberSaveable { mutableStateOf(false)}
+
+        SearchBar(
+            modifier = modifier,
+            inputField = {
+                SearchBarDefaults.InputField(
+                    query = textFieldStat.text.toString(),
+                    onQueryChange = { textFieldStat.edit { replace(0, length, it) } },
+                    onSearch = {
+                        onSearch(textFieldStat.text.toString())
+
+                    },
+
+                    expanded = expanded,
+                    onExpandedChange = {expanded = it},
+                    placeholder = { "Search" },
+                    leadingIcon = {}
+                )
+            },
+
+            expanded = expanded,
+            onExpandedChange = { expanded = it },
+        )
+        {
+        }
+}
+
+
 
 @Composable
 fun GetUserInfo(
@@ -87,8 +135,9 @@ fun GetUserInfo(
         leadingIcon  = { Icon(painter= painterResource(leadingIcon), null) }
     )
 }
+
 @Composable // SIGNIN & SIGNOUT FORM
-fun MainAppLayout(modifier: Modifier = Modifier)
+fun LoginAppLayout(modifier: Modifier = Modifier)
 {
     var email by remember { mutableStateOf("") }
     var password by remember {mutableStateOf("")}
@@ -175,29 +224,105 @@ fun MainAppLayout(modifier: Modifier = Modifier)
 }
 
 
+
+@Composable
+fun MainAppLayout()
+{
+    var textFieldStat  = rememberTextFieldState()
+    var items = listOf(
+        "Tech", "Medicine"
+    )
+    Scaffold(
+        topBar = {
+
+            Row(modifier = Modifier.padding(horizontal = 2.dp), verticalAlignment = Alignment.CenterVertically){
+                Icon(
+                    painter = painterResource(R.drawable.icons8_menu_30),
+                    contentDescription = null,
+                    modifier = Modifier.size(55.dp)
+                )
+                Spacer(modifier = Modifier.padding(horizontal = 5.dp))
+                JobAppTopBar(
+                    textFieldStat = textFieldStat,
+                    onSearch =  {/**/},
+                    searchResults = items,
+
+                )
+            }
+
+        }
+    ) {
+        LazyColumn(contentPadding = it) { //verticalArrangement = Arrangement.spacedBy(40.dp),
+            items(DataSource().loadJobInfo()) { job->
+                JobCardView(
+                    jobInfo = job
+                )
+            }
+        }
+//        JobListsView(DataSource().loadJobInfo(), modifier = Modifier.fillMaxSize(), contentPadding = it)
+    }
+//    var layoutDirection  = LocalLayoutDirection.current
+//
+//    Surface(
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .padding(
+//                start = WindowInsets.safeDrawing.asPaddingValues()
+//                    .calculateStartPadding(layoutDirection),
+//                end = WindowInsets.safeDrawing.asPaddingValues()
+//                    .calculateEndPadding(layoutDirection)
+//            )
+//        ,
+//        color = MaterialTheme.colorScheme.background
+//    ) {
+//       MainAppLayout()
+//       JobView(modifier)
+//        JobListsView(DataSource().loadJobInfo(), modifier = Modifier.fillMaxSize())
+
+//    }
+}
 @Preview
 @Composable
 fun MainAppPreview(modifier: Modifier = Modifier)
 {
-    var layoutDirection  = LocalLayoutDirection.current
+    MyApplicationTheme(darkTheme = false) {
+        MainAppLayout()
+    }
+//    var layoutDirection = LocalLayoutDirection.current
+//
+//    Surface(
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .padding(
+//                start = WindowInsets.safeDrawing.asPaddingValues()
+//                    .calculateStartPadding(layoutDirection),
+//                end = WindowInsets.safeDrawing.asPaddingValues()
+//                    .calculateEndPadding(layoutDirection)
+//            ),
+//        color = MaterialTheme.colorScheme.background
+//    ) {
+////            MainAppLayout()
+////            JobView(modifier)
+//        MyApplicationTheme(darkTheme = false) {
+////
+//            JobListsView(DataSource().loadJobInfo(), modifier = Modifier.fillMaxSize())
+//        }
+//
+//    }
+}
 
-        Surface(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(
-                    start = WindowInsets.safeDrawing.asPaddingValues()
-                        .calculateStartPadding(layoutDirection),
-                    end =  WindowInsets.safeDrawing.asPaddingValues()
-                        .calculateEndPadding(layoutDirection)
-                )
-            ,
-            color = MaterialTheme.colorScheme.background
-        ) {
-//            MainAppLayout()
-//            JobView(modifier)
-            JobListsView(DataSource().loadJobInfo(), modifier = Modifier.fillMaxSize())
+// dark preview
+@Preview
+@Composable
+fun MainDarkPreview()
+{
+    MyApplicationTheme(darkTheme = true)
+    {
 
-        }
+        MainAppLayout()
+//        JobListsView(DataSource().loadJobInfo(), modifier = Modifier.fillMaxSize())
+    }
+
 }
 
 
@@ -384,7 +509,7 @@ fun JobCardView(modifier: Modifier = Modifier, jobInfo: JobInfo) {
 @Composable // this is for lazyloading
 fun JobListsView(jobInfoLists: List<JobInfo>, modifier: Modifier = Modifier)
 {
-    LazyColumn(modifier,   verticalArrangement = Arrangement.spacedBy(40.dp)) {
+    LazyColumn(modifier ,verticalArrangement = Arrangement.spacedBy(40.dp)) {
         items(jobInfoLists) { job -> // if what am receiving are objects in this then to access a property of object i use dot notation: object.property
             JobCardView(
 //                modifier = Modifier.fillMaxWidth(),

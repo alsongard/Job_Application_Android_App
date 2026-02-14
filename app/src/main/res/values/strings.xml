@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">JobAPP</string>
     <string name="email_label">Email</string>
     <string name="password_label">Password</string>
 </resources>

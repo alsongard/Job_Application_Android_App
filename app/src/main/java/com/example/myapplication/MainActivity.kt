@@ -23,17 +23,24 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.rememberTextFieldState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ExpandLess
+import androidx.compose.material.icons.filled.ExpandMore
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
@@ -225,6 +232,241 @@ fun LoginAppLayout(modifier: Modifier = Modifier)
 
 
 
+
+
+
+
+@Composable
+fun MiniCardJobView(jobInfo: JobInfo, expanded: Boolean, modifier: Modifier = Modifier, onClick: ()-> Unit)
+{
+    Card(
+        modifier = modifier,
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface))
+    {
+        if (expanded)
+            Row(modifier = Modifier.fillMaxWidth().padding(5.dp), verticalAlignment = Alignment.Top)
+            {
+                // here we benefit the use of classes: specifically the data class
+                Image(
+                    painter = painterResource(jobInfo.jobCompanyLogo),
+                    contentDescription = stringResource(R.string.job_description_1),
+                    Modifier.height(50.dp).width(50.dp).clip(CircleShape)
+                )
+                Spacer(modifier = Modifier.padding(horizontal = 10.dp))
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(stringResource(jobInfo.jobCategory)) /// title
+                    Text(stringResource(jobInfo.jobCompanyName)) //company name
+                    Text(stringResource(jobInfo.jobLocation)) // Location
+                    Text("2025-02-12") // date of posting
+                }
+                IconButton(onClick = onClick) {
+                    Icon(
+                        imageVector = if (expanded) Icons.Default.ExpandMore else Icons.Default.ExpandLess,
+                        contentDescription = null
+                    )
+                }
+
+            }
+
+        else 
+            Column(
+                modifier = modifier
+                    .padding(horizontal = 16.dp, 16.dp)
+                    .fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            )
+            {
+                // Company Logo
+                Row(
+                    verticalAlignment = Alignment.Top
+                )
+                {
+                    Image(
+                        painter = painterResource(jobInfo.jobCompanyLogo),
+                        contentDescription = "Company Logo",
+                        modifier = Modifier
+                            //                    .size(100.dp)
+                            .height(120.dp)
+                            .weight(2f)
+//                            .fillMaxWidth(1f)
+//                            .align(Alignment.CenterHorizontally)
+                            .clip(RoundedCornerShape(8.dp)),
+                        contentScale = ContentScale.Crop
+                    )
+                    IconButton(onClick = onClick) {
+                        Icon(
+                            imageVector = if (expanded) Icons.Default.ExpandMore else Icons.Default.ExpandLess,
+                            contentDescription = null
+                        )
+                    }
+                    
+                }
+
+                // Company Name
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = "Company: ",
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(
+                        text = stringResource(jobInfo.jobCompanyName),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+
+                // Mission
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text(
+                        text = "Mission:",
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(
+                        text = stringResource(jobInfo.jobCompanyMission),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+                //
+                //            // Website
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = "Website: ",
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(
+                        text = stringResource(jobInfo.jobCompanyWebsite),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+
+                // Category
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = "Category: ",
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(
+                        text = stringResource(jobInfo.jobCategory),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+
+                // Type
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = "Type: ",
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(
+                        text = stringResource(jobInfo.jobType),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+
+                // Experience Level
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = "Experience: ",
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(
+                        text = stringResource(jobInfo.jobExperience),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+
+                // Location
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = "Location: ",
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(
+                        text = stringResource(jobInfo.jobLocation),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+
+                HorizontalDivider(
+                    modifier = Modifier.padding(vertical = 8.dp),
+                    color = MaterialTheme.colorScheme.outlineVariant
+                )
+
+                // Job Description
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text(
+                        text = "Description:",
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(
+                        text = stringResource(jobInfo.jobDescription),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+
+                // Requirements
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text(
+                        text = "Requirements:",
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    stringArrayResource(R.array.job_requirements_1).forEach { requirement ->
+                        Row(
+                            modifier = Modifier.padding(start = 8.dp),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Text(
+                                text = "•",
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                            Text(
+                                text = requirement,
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
+                    }
+                }
+                Button(onClick={/**/}, modifier.fillMaxWidth()) {
+                    Text(text="Apply")
+                }
+                //            Spacer(modifier.padding(vertical = 10.dp))
+            }
+    }
+
+}
+
+@Composable
+fun JobCardView(modifier: Modifier = Modifier, jobInfo: JobInfo) {
+    var expanded by remember { mutableStateOf(true) }
+    Card(
+        modifier = modifier.padding(vertical = 20.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+    )
+    {
+        MiniCardJobView(jobInfo, expanded = expanded, onClick = {expanded = !expanded})
+    }
+}
+
 @Composable
 fun MainAppLayout()
 {
@@ -237,9 +479,8 @@ fun MainAppLayout()
 
             Row(modifier = Modifier.padding(horizontal = 2.dp), verticalAlignment = Alignment.CenterVertically){
                 Icon(
-                    painter = painterResource(R.drawable.icons8_menu_30),
-                    contentDescription = null,
-                    modifier = Modifier.size(55.dp)
+                    imageVector = Icons.Default.Menu,
+                    contentDescription = "Menu",
                 )
                 Spacer(modifier = Modifier.padding(horizontal = 5.dp))
                 JobAppTopBar(
@@ -247,7 +488,7 @@ fun MainAppLayout()
                     onSearch =  {/**/},
                     searchResults = items,
 
-                )
+                    )
             }
 
         }
@@ -259,28 +500,9 @@ fun MainAppLayout()
                 )
             }
         }
-//        JobListsView(DataSource().loadJobInfo(), modifier = Modifier.fillMaxSize(), contentPadding = it)
     }
-//    var layoutDirection  = LocalLayoutDirection.current
-//
-//    Surface(
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .padding(
-//                start = WindowInsets.safeDrawing.asPaddingValues()
-//                    .calculateStartPadding(layoutDirection),
-//                end = WindowInsets.safeDrawing.asPaddingValues()
-//                    .calculateEndPadding(layoutDirection)
-//            )
-//        ,
-//        color = MaterialTheme.colorScheme.background
-//    ) {
-//       MainAppLayout()
-//       JobView(modifier)
-//        JobListsView(DataSource().loadJobInfo(), modifier = Modifier.fillMaxSize())
-
-//    }
 }
+
 @Preview
 @Composable
 fun MainAppPreview(modifier: Modifier = Modifier)
@@ -288,28 +510,8 @@ fun MainAppPreview(modifier: Modifier = Modifier)
     MyApplicationTheme(darkTheme = false) {
         MainAppLayout()
     }
-//    var layoutDirection = LocalLayoutDirection.current
-//
-//    Surface(
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .padding(
-//                start = WindowInsets.safeDrawing.asPaddingValues()
-//                    .calculateStartPadding(layoutDirection),
-//                end = WindowInsets.safeDrawing.asPaddingValues()
-//                    .calculateEndPadding(layoutDirection)
-//            ),
-//        color = MaterialTheme.colorScheme.background
-//    ) {
-////            MainAppLayout()
-////            JobView(modifier)
-//        MyApplicationTheme(darkTheme = false) {
-////
-//            JobListsView(DataSource().loadJobInfo(), modifier = Modifier.fillMaxSize())
-//        }
-//
-//    }
 }
+
 
 // dark preview
 @Preview
@@ -318,193 +520,9 @@ fun MainDarkPreview()
 {
     MyApplicationTheme(darkTheme = true)
     {
-
         MainAppLayout()
-//        JobListsView(DataSource().loadJobInfo(), modifier = Modifier.fillMaxSize())
-    }
-
-}
-
-
-
-
-@Composable
-fun JobCardView(modifier: Modifier = Modifier, jobInfo: JobInfo) {
-    Card(
-        modifier = modifier,
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
-    ) {
-        Column(
-            modifier = modifier
-                .padding(horizontal = 16.dp, 16.dp)
-                .fillMaxWidth()
-            ,
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            // Company Logo
-            Image(
-                painter = painterResource(jobInfo.jobCompanyLogo),
-                contentDescription = "Company Logo",
-                modifier = Modifier
-//                    .size(100.dp)
-                    .height(120.dp)
-                    .fillMaxWidth(1f)
-                    .align(Alignment.CenterHorizontally)
-                    .clip(RoundedCornerShape(8.dp)),
-                contentScale = ContentScale.Crop
-            )
-
-            // Company Name
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    text = "Company: ",
-                    style = MaterialTheme.typography.labelMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Text(
-                    text = stringResource(jobInfo.jobCompanyName),
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
-
-            // Mission
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(
-                    text = "Mission:",
-                    style = MaterialTheme.typography.labelMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Text(
-                    text = stringResource(jobInfo.jobCompanyMission),
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
-//
-//            // Website
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    text = "Website: ",
-                    style = MaterialTheme.typography.labelMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Text(
-                    text = stringResource(jobInfo.jobCompanyWebsite),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.primary
-                )
-            }
-
-            // Category
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    text = "Category: ",
-                    style = MaterialTheme.typography.labelMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Text(
-                    text = stringResource(jobInfo.jobCategory),
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
-
-            // Type
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    text = "Type: ",
-                    style = MaterialTheme.typography.labelMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Text(
-                    text = stringResource(jobInfo.jobType),
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
-
-            // Experience Level
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    text = "Experience: ",
-                    style = MaterialTheme.typography.labelMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Text(
-                    text = stringResource(jobInfo.jobExperience),
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
-
-            // Location
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    text = "Location: ",
-                    style = MaterialTheme.typography.labelMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Text(
-                    text = stringResource(jobInfo.jobLocation),
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
-
-            HorizontalDivider(
-                modifier = Modifier.padding(vertical = 8.dp),
-                color = MaterialTheme.colorScheme.outlineVariant
-            )
-
-            // Job Description
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(
-                    text = "Description:",
-                    style = MaterialTheme.typography.labelMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Text(
-                    text = stringResource(jobInfo.jobDescription),
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
-
-            // Requirements
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(
-                    text = "Requirements:",
-                    style = MaterialTheme.typography.labelMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                stringArrayResource(R.array.job_requirements_1).forEach { requirement ->
-                    Row(
-                        modifier = Modifier.padding(start = 8.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        Text(
-                            text = "•",
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                        Text(
-                            text = requirement,
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                    }
-                }
-            }
-            Button(onClick={/**/}, modifier.fillMaxWidth()) {
-                Text(text="Apply")
-            }
-//            Spacer(modifier.padding(vertical = 10.dp))
-        }
     }
 }
-
 
 @Composable // this is for lazyloading
 fun JobListsView(jobInfoLists: List<JobInfo>, modifier: Modifier = Modifier)

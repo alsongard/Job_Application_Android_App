@@ -1,9 +1,5 @@
-package com.example.myapplication
+package com.example.myapplication.ui.theme
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.animation.animateContentSize
@@ -15,17 +11,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.calculateEndPadding
-import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeContentPadding
-import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -48,7 +37,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -63,7 +51,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
@@ -71,60 +58,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.myapplication.R
 import com.example.myapplication.data.DataSource
 import com.example.myapplication.model.JobInfo
-import com.example.myapplication.ui.theme.MyApplicationTheme
 
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            MyApplicationTheme {
-                Surface(modifier= Modifier.fillMaxSize())
-                {
-                    MainAppLayout()
-                }
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun JobAppTopBar(
-    textFieldStat: TextFieldState,
-    onSearch: (String)->Unit,
-    searchResults: List<String>,
-    modifier: Modifier = Modifier
-)
-{
-    var expanded by rememberSaveable { mutableStateOf(false)}
-
-        SearchBar(
-            modifier = modifier,
-            inputField = {
-                SearchBarDefaults.InputField(
-                    query = textFieldStat.text.toString(),
-                    onQueryChange = { textFieldStat.edit { replace(0, length, it) } },
-                    onSearch = {
-                        onSearch(textFieldStat.text.toString())
-
-                    },
-
-                    expanded = expanded,
-                    onExpandedChange = {expanded = it},
-                    placeholder = { "Search" },
-                    leadingIcon = {}
-                )
-            },
-
-            expanded = expanded,
-            onExpandedChange = { expanded = it },
-        )
-        {
-        }
-}
 
 
 
@@ -235,44 +172,90 @@ fun LoginAppLayout(modifier: Modifier = Modifier)
 
 
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun JobAppTopBar(
+    textFieldStat: TextFieldState,
+    onSearch: (String)->Unit,
+    searchResults: List<String>,
+    modifier: Modifier = Modifier
+)
+{
+    var searchExpanded by rememberSaveable { mutableStateOf(false)}
 
+    SearchBar(
+        modifier = modifier,
+        inputField = {
+            SearchBarDefaults.InputField(
+                query = textFieldStat.text.toString(),
+                onQueryChange = { textFieldStat.edit { replace(0, length, it) } },
+                onSearch = {
+                    onSearch(textFieldStat.text.toString())
+
+                },
+
+                expanded = searchExpanded,
+                onExpandedChange = {searchExpanded = it},
+                placeholder = { "Search" },
+                leadingIcon = {}
+            )
+        },
+
+        expanded = searchExpanded,
+        onExpandedChange = { searchExpanded = it },
+    )
+    {
+    }
+}
+
+@Composable
+fun MainJobView(modifier: Modifier = Modifier, jobInfo: JobInfo) {
+    var expanded by remember { mutableStateOf(true) }
+    Card(
+        modifier = modifier.padding(vertical = 20.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+    )
+    {
+        JobCardView(jobInfo, expanded = expanded, onClick = { expanded = !expanded })
+    }
+}
 
 
 
 @Composable
-fun MiniCardJobView(jobInfo: JobInfo, expanded: Boolean, modifier: Modifier = Modifier, onClick: ()-> Unit)
+fun JobCardView(jobInfo: JobInfo, expanded: Boolean, modifier: Modifier = Modifier, onClick: ()-> Unit)
 {
     Card(
         modifier = modifier,
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface))
     {
-
-            Row(modifier = Modifier.fillMaxWidth().padding(5.dp), verticalAlignment = Alignment.Top)
-            {
-                // here we benefit the use of classes: specifically the data class
-                Image(
-                    painter = painterResource(jobInfo.jobCompanyLogo),
-                    contentDescription = stringResource(R.string.job_description_1),
-                    Modifier.height(50.dp).width(50.dp).clip(CircleShape)
-                )
-                Spacer(modifier = Modifier.padding(horizontal = 10.dp))
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(stringResource(jobInfo.jobCategory),
-                            style = MaterialTheme.typography.headlineSmall
-                    ) /// title
-                    Text(stringResource(jobInfo.jobCompanyName), style = MaterialTheme.typography.titleLarge) //company name
-                    Text(stringResource(jobInfo.jobLocation), style=MaterialTheme.typography.bodyMedium) // Location
-                    Text("2025-02-12", style=MaterialTheme.typography.bodyMedium) // date of posting
-                }
-                IconButton(onClick = onClick) {
-                    Icon(
-                        imageVector = if (expanded) Icons.Default.ExpandMore else Icons.Default.ExpandLess,
-                        contentDescription = null
-                    )
-                }
-
+        Row(modifier = Modifier.fillMaxWidth().padding(5.dp), verticalAlignment = Alignment.Top)
+        {
+            // here we benefit the use of classes: specifically the data class
+            Image(
+                painter = painterResource(jobInfo.jobCompanyLogo),
+                contentDescription = stringResource(R.string.job_description_1),
+                Modifier.height(50.dp).width(50.dp).clip(CircleShape)
+            )
+            Spacer(modifier = Modifier.padding(horizontal = 10.dp))
+            Column(modifier = Modifier.weight(1f)) {
+                Text(stringResource(jobInfo.jobCategory),
+                    style = MaterialTheme.typography.headlineSmall
+                ) /// title
+                Text(stringResource(jobInfo.jobCompanyName), style = MaterialTheme.typography.titleLarge) //company name
+                Text(stringResource(jobInfo.jobLocation), style=MaterialTheme.typography.bodyMedium) // Location
+                Text("2025-02-12", style=MaterialTheme.typography.bodyMedium) // date of posting
             }
+            IconButton(onClick = onClick) {
+                Icon(
+                    imageVector = if (expanded) Icons.Default.ExpandMore else Icons.Default.ExpandLess,
+                    contentDescription = null
+                )
+            }
+
+        }
 
         if (!expanded)
             Column(
@@ -307,7 +290,7 @@ fun MiniCardJobView(jobInfo: JobInfo, expanded: Boolean, modifier: Modifier = Mo
                         contentScale = ContentScale.Crop
                     )
 
-                    
+
                 }
 
                 // Company Name
@@ -436,7 +419,7 @@ fun MiniCardJobView(jobInfo: JobInfo, expanded: Boolean, modifier: Modifier = Mo
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
-                    stringArrayResource(R.array.job_requirements_1).forEach { requirement ->
+                    stringArrayResource(jobInfo.jobRequirement).forEach { requirement ->
                         Row(
                             modifier = Modifier.padding(start = 8.dp),
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -458,20 +441,6 @@ fun MiniCardJobView(jobInfo: JobInfo, expanded: Boolean, modifier: Modifier = Mo
                 //            Spacer(modifier.padding(vertical = 10.dp))
             }
     }
-
-}
-
-@Composable
-fun JobCardView(modifier: Modifier = Modifier, jobInfo: JobInfo) {
-    var expanded by remember { mutableStateOf(true) }
-    Card(
-        modifier = modifier.padding(vertical = 20.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
-    )
-    {
-        MiniCardJobView(jobInfo, expanded = expanded, onClick = {expanded = !expanded})
-    }
 }
 
 @Composable
@@ -483,7 +452,6 @@ fun MainAppLayout()
     )
     Scaffold(
         topBar = {
-
             Row(modifier = Modifier.padding(horizontal = 2.dp), verticalAlignment = Alignment.CenterVertically){
                 Icon(
                     imageVector = Icons.Default.Menu,
@@ -502,7 +470,7 @@ fun MainAppLayout()
     ) {
         LazyColumn(contentPadding = it) { //verticalArrangement = Arrangement.spacedBy(40.dp),
             items(DataSource().loadJobInfo()) { job->
-                JobCardView(
+                MainJobView(
                     jobInfo = job
                 )
             }
@@ -512,36 +480,18 @@ fun MainAppLayout()
 
 @Preview
 @Composable
-fun MainAppPreview(modifier: Modifier = Modifier)
+fun JobScreenPreview()
 {
-    MyApplicationTheme(darkTheme = false) {
+    MyApplicationTheme(darkTheme = true) {
         MainAppLayout()
     }
 }
 
 
-// dark preview
-@Preview
 @Composable
-fun MainDarkPreview()
+fun JobScreen()
 {
-    MyApplicationTheme(darkTheme = true)
-    {
+    MyApplicationTheme(darkTheme = true) {
         MainAppLayout()
-    }
-}
-
-@Composable // this is for lazyloading
-fun JobListsView(jobInfoLists: List<JobInfo>, modifier: Modifier = Modifier)
-{
-    LazyColumn(modifier ,verticalArrangement = Arrangement.spacedBy(40.dp)) {
-        items(jobInfoLists) { job -> // if what am receiving are objects in this then to access a property of object i use dot notation: object.property
-            JobCardView(
-//                modifier = Modifier.fillMaxWidth(),
-                jobInfo = job
-            )
-
-
-        }
     }
 }

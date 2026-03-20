@@ -1,6 +1,0 @@
-<resources>
-    <string name="app_name">JobAPP</string>
-    <string name="email_label">Email</string>
-    <string name="password_label">Password</string>
-    <string name="confirm_label">Confirm Password</string>
-</resources>

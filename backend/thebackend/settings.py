@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-0kr#jqqx6-bnwmd*$53dqtj)wfd516y7xvn=$+9v0&@^#1vvje
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://jobapp-jpcx.onrender.com/', 'localhost']
+ALLOWED_HOSTS = ['jobapp-jpcx.onrender.com/', 'localhost']
 
 
 # Application definition

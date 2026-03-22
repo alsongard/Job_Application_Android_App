@@ -2,7 +2,7 @@ databases:
   - name: jobappdb  # render launches an instance of postgresql and with it creates a database jobappdb: this name is for infrastructure management
     plan: free # Render’s free PostgreSQL tier
     databaseName: jobappdb # actual name for the DATABASE: CREATE DATABASE jobappdb
-    user: myuser  # # user created with access to this DB: jobappdb
+    user: myuser  # user created with access to this DB: jobappdb
 
 services:
   - type: web # deploys a public web services: handles http request

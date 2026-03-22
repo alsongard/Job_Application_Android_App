@@ -1,0 +1,24 @@
+databases:
+  - name: jobapp
+    plan: free
+    databaseName: jobappdb
+    user: myuser
+
+services:
+  - type: web
+    plan: free
+    name: thebackend
+    runtime: python
+    buildCommand: './build.sh'
+    startCommand: 'python -m gunicorn thebackend.wsgi:application
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: jobappdb
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: WEB_CONCURRENCY
+        value: 4
+      - key: DEBUG
+        value : false

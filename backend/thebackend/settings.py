@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-0kr#jqqx6-bnwmd*$53dqtj)wfd516y7xvn=$+9v0&@^#1vvje
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'false') == 'True'
 
-ALLOWED_HOSTS = ['https://job-application-android-app.onrender.com', 'localhost']
+ALLOWED_HOSTS = ['job-application-android-app.onrender.com', 'localhost']
 
 
 # Application definition

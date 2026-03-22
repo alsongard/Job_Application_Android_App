@@ -89,7 +89,6 @@ WSGI_APPLICATION = 'thebackend.wsgi.application'
 
 if os.environ.get('RENDER'): # this is true set below
     print(f"os.environ.get('RENDER'): {os.environ.get('RENDER')}")
-    print("db_database_url.config")
     # Replace the SQLite DATABASES configuration with PostgreSQL:
     DATABASES = {
         'default': dj_database_url.config(

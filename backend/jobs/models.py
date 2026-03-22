@@ -7,14 +7,17 @@ class Job(models.Model):
     JOB_TYPE_CHOICES=[
         ("full-time", "Full Time"),
         ("part-time", "Part Time"),
-        ("hybrid", "Hybrid")
+        ("hybrid", "Hybrid"),
+        ("remote", "Remote"),
+        ("contract", "Contracts")
     ]
     job_type = models.CharField(max_length=255, choices=JOB_TYPE_CHOICES)
     EXPERIENCE_LEVEL_CHOICES = [
         ("junior" , "Junior"),
         ("internship", "Internship"),
         ("senior"  , "Senior"),
-        ("attachment", "Attachment")
+        ("attachment", "Attachment"),
+        ("mid-senior", "Mid-Senior")
     ]
     experience_level = models.CharField(max_length=255, choices=EXPERIENCE_LEVEL_CHOICES)
     job_description =  models.CharField(max_length=1000)
@@ -24,8 +27,12 @@ class Job(models.Model):
     company_name = models.CharField(max_length=500)
     website = models.CharField(max_length=500)
     mission = models.CharField(max_length=1500)
-    logo= models.CharField(max_length=500)
+    logo= models.CharField(max_length=2500)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        ordering = ["-created_at"] # orders the records from the oldest:first to newest
 
 
 
@@ -47,6 +54,6 @@ class Job(models.Model):
     <string name="application_deadline_1">2026-03-15</string>
     <string name="company_name_1">Google</string>
     <string name="website_1">https://about.google</string>
-    <string name="mission_1">To organize the world\'s information and make it universally accessible and useful.</string>
+    <string name="mission_1">To organize the world's information and make it universally accessible and useful.</string>
     <string name="logo_1">https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png</string>
 """

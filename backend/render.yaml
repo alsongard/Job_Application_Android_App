@@ -10,7 +10,7 @@ services:
     name: jobapp # Service name shown in dashboard; part of the default URL
     runtime: python # Uses Python runtime;
     buildCommand: './backend/build.sh' #  # Runs during deployment. Typically installs deps and runs migrations:
-    startCommand: 'python -m gunicorn thebackend.wsgi:application'  # Starts Gunicorn WSGI server to serve Django app.
+    startCommand: 'python -m gunicorn ./backend/thebackend.wsgi:application'  # Starts Gunicorn WSGI server to serve Django app.
     envVars:
       - key: DATABASE_URL # Django uses this to connect to PostgreSQL.
         fromDatabase: # fromDatabase dynamically injects the full connection string (host, port, user, password, SSL mode).

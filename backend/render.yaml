@@ -9,7 +9,7 @@ services:
     plan: free # Render’s free instance
     name: jobapp # Service name shown in dashboard; part of the default URL
     runtime: python # Uses Python runtime;
-    buildCommand: './build.sh' #  # Runs during deployment. Typically installs deps and runs migrations:
+    buildCommand: './backend/build.sh' #  # Runs during deployment. Typically installs deps and runs migrations:
     startCommand: 'python -m gunicorn thebackend.wsgi:application'  # Starts Gunicorn WSGI server to serve Django app.
     envVars:
       - key: DATABASE_URL # Django uses this to connect to PostgreSQL.

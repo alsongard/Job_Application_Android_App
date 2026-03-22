@@ -8,6 +8,9 @@ git-filter-repo==2.47.0
 packaging==26.0
 pipx==1.9.0
 platformdirs==4.9.4
+psycopg==3.3.3
+psycopg-binary==3.3.3
+Pygments==2.19.2
 sqlparse==0.5.5
 tzdata==2025.3
 userpath==1.9.2

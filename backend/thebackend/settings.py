@@ -87,6 +87,7 @@ WSGI_APPLICATION = 'thebackend.wsgi.application'
 # }
 
 if os.environ.get('RENDER'): # this is true set below
+    print(f"os.environ.get('RENDER'): {os.environ.get('RENDER')}")
     DATABASES = {
         'default': dj_database_url.config(
             default=os.environ.get('DATABASE_URL'),
@@ -104,7 +105,7 @@ else:
             },
         }
     }
-
+print("DATABASES config:", DATABASES)
 
 
 

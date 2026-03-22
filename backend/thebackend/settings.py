@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.postgres',
     'user.apps.UserConfig',
-    'jobs.apps.JobsConfig'
+    'jobs.apps.JobsConfig',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [

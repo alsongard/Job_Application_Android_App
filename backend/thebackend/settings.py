@@ -16,6 +16,7 @@ import  dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+print(f"os.environ.get('RENDER'): {os.environ.get('RENDER')}")
 
 
 # Quick-start development settings - unsuitable for production
@@ -88,13 +89,18 @@ WSGI_APPLICATION = 'thebackend.wsgi.application'
 
 if os.environ.get('RENDER'): # this is true set below
     print(f"os.environ.get('RENDER'): {os.environ.get('RENDER')}")
+    print("db_database_url.config")
+    # Replace the SQLite DATABASES configuration with PostgreSQL:
     DATABASES = {
         'default': dj_database_url.config(
-            default=os.environ.get('DATABASE_URL'),
-            conn_max_age=600,
-            ssl_require=True
+            # Replace this value with your local database's connection string.
+            default='postgresql://postgres:postgres@localhost:5432/thebackend',
+            conn_max_age=600
         )
     }
+    print('DATABASES')
+    print(DATABASES)
+
 else:
     DATABASES = {
         "default": {

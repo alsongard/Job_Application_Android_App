@@ -26,7 +26,12 @@ print(f"os.environ.get('RENDER'): {os.environ.get('RENDER')}")
 SECRET_KEY = 'django-insecure-0kr#jqqx6-bnwmd*$53dqtj)wfd516y7xvn=$+9v0&@^#1vvje'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if os.environ.get('RENDER'):
+    print('DEBUG SET TO FALSE')
+    DEBUG =  False 
+else:
+    print('DEBUG SET TO True')
+    DEBUG = True
 
 ALLOWED_HOSTS = ['jobapp-jpcx.onrender.com', 'localhost']
 
@@ -155,6 +160,8 @@ print(f"BASE_DIR: ${BASE_DIR}")
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 print(f"STATIC_ROOT: ${STATIC_ROOT}")
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/

@@ -97,7 +97,7 @@ WSGI_APPLICATION = 'thebackend.wsgi.application'
 # }
 
 database_url = os.getenv("EXTERNAL_DB_URL")
-if os.environ.get('RENDER'): # this is true set below
+if os.environ.get('RENDER') == "true": # this is true set below
     print(f"running on production: os.environ.get('RENDER'): {os.environ.get('RENDER')}")
     # Replace the SQLite DATABASES configuration with PostgreSQL:
     DATABASES = {
@@ -108,14 +108,14 @@ if os.environ.get('RENDER'): # this is true set below
             ssl_require=True   # Render requires SS
         )
     }
-    print('DATABASES')
+    print('DATABASES::')
     print(DATABASES)
 
 else:
-    print("setting server on local device")
+    print("setting server on local device: {database_url}")
     DATABASES = {
         "default": dj_database_url.config(
-            default=database_url,
+            default=os.getenv("EXTERNAL_DB_URL") ,
             conn_max_age=600,
             ssl_require=True   # Render requires SS
         )

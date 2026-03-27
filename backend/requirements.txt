@@ -15,6 +15,7 @@ platformdirs==4.9.4
 psycopg==3.3.3
 psycopg-binary==3.3.3
 Pygments==2.19.2
+python-dotenv==1.2.2
 sqlparse==0.5.5
 tzdata==2025.3
 userpath==1.9.2

@@ -12,11 +12,15 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 from pathlib import Path
 import os
+from  dotenv import load_dotenv
 import  dj_database_url
+
+# load environment variables from .env file
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-print(f"os.environ.get('RENDER'): {os.environ.get('RENDER')}")
+# print(f"os.environ.get('RENDER'): {os.environ.get('RENDER')}")
 
 
 # Quick-start development settings - unsuitable for production
@@ -33,7 +37,7 @@ else:
     print('DEBUG SET TO True')
     DEBUG = True
 
-ALLOWED_HOSTS = ['jobapp-jpcx.onrender.com', 'localhost']
+ALLOWED_HOSTS = ['jobapp-jpcx.onrender.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -92,31 +96,32 @@ WSGI_APPLICATION = 'thebackend.wsgi.application'
 #     }
 # }
 
+database_url = os.getenv("EXTERNAL_DB_URL")
 if os.environ.get('RENDER'): # this is true set below
-    print(f"os.environ.get('RENDER'): {os.environ.get('RENDER')}")
+    print(f"running on production: os.environ.get('RENDER'): {os.environ.get('RENDER')}")
     # Replace the SQLite DATABASES configuration with PostgreSQL:
     DATABASES = {
         'default': dj_database_url.config(
             # Replace this value with your local database's connection string.
             default='postgresql://postgres:postgres@localhost:5432/thebackend',
-            conn_max_age=600
+            conn_max_age=600,
+            ssl_require=True   # Render requires SS
         )
     }
     print('DATABASES')
     print(DATABASES)
 
 else:
+    print("setting server on local device")
     DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "OPTIONS": {
-                "service": "my_service",
-                "passfile": "/home/alson-kali/.my_pgpass",
-            },
-        }
+        "default": dj_database_url.config(
+            default=database_url,
+            conn_max_age=600,
+            ssl_require=True   # Render requires SS
+        )
     }
 print("DATABASES config:", DATABASES)
-
+# print(f"DATABASE_URL: {database_url}")
 
 
 

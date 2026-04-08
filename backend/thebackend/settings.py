@@ -103,7 +103,7 @@ if os.environ.get('RENDER') == "true": # this is true set below
     DATABASES = {
         'default': dj_database_url.config(
             # Replace this value with your local database's connection string.
-            default='postgresql://postgres:postgres@localhost:5432/thebackend',
+            # default='postgresql://postgres:postgres@localhost:5432/thebackend',
             conn_max_age=600,
             ssl_require=True   # Render requires SS
         )
@@ -112,14 +112,16 @@ if os.environ.get('RENDER') == "true": # this is true set below
     print(DATABASES)
 
 else:
-    print("setting server on local device: {database_url}")
+    print("setting server on local device using external DB: {database_url}")
     DATABASES = {
-        "default": dj_database_url.config(
-            default=os.getenv("EXTERNAL_DB_URL") ,
-            conn_max_age=600,
-            ssl_require=True   # Render requires SS
-        )
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "OPTIONS": {
+                "service": "my_service",
+            },
+        }
     }
+
 print("DATABASES config:", DATABASES)
 # print(f"DATABASE_URL: {database_url}")
 

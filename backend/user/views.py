@@ -10,12 +10,16 @@ def index(request):
 
 @api_view(["POST"])
 def register_user(request):
-    print("request")
-    print(request)
+    # print("request")
+    # print(request)
+    # request
+    # <rest_framework.request.Request: POST '/users/register/'>
     data  = JSONParser().parse(request)
-    print('data')
-    print(data)
-    serializer = UserSerializer(data)
+    # print('data')
+    # print(data)
+    # data
+    # {'user_email': 'jupiter@gmail.com', 'password': 'password'}
+    serializer = UserSerializer(data = data)
     if serializer.is_valid():
         serializer.save()
         return JsonResponse(serializer.data)

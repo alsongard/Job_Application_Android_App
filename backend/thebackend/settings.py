@@ -11,9 +11,16 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+import os
+from  dotenv import load_dotenv
+import  dj_database_url
+
+# load environment variables from .env file
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+# print(f"os.environ.get('RENDER'): {os.environ.get('RENDER')}")
 
 
 # Quick-start development settings - unsuitable for production
@@ -23,9 +30,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-0kr#jqqx6-bnwmd*$53dqtj)wfd516y7xvn=$+9v0&@^#1vvje'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if os.environ.get('RENDER'):
+    print('DEBUG SET TO FALSE')
+    DEBUG =  False 
+else:
+    print('DEBUG SET TO True')
+    DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['jobapp-jpcx.onrender.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -37,10 +49,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.postgres',
+    'user.apps.UserConfig',
+    'jobs.apps.JobsConfig',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -72,12 +89,42 @@ WSGI_APPLICATION = 'thebackend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
+database_url = os.getenv("EXTERNAL_DB_URL")
+if os.environ.get('RENDER') == "true": # this is true set below
+    print(f"running on production: os.environ.get('RENDER'): {os.environ.get('RENDER')}")
+    # Replace the SQLite DATABASES configuration with PostgreSQL:
+    DATABASES = {
+        'default': dj_database_url.config(
+            # Replace this value with your local database's connection string.
+            # default='postgresql://postgres:postgres@localhost:5432/thebackend',
+            conn_max_age=600,
+            ssl_require=True   # Render requires SS
+        )
     }
-}
+    print('DATABASES::')
+    print(DATABASES)
+
+else:
+    print("setting server on local device using external DB: {database_url}")
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "OPTIONS": {
+                "service": "my_service",
+            },
+        }
+    }
+
+print("DATABASES config:", DATABASES)
+# print(f"DATABASE_URL: {database_url}")
+
 
 
 # Password validation
@@ -114,4 +161,23 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+
+print(f"BASE_DIR: ${BASE_DIR}")
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+print(f"STATIC_ROOT: ${STATIC_ROOT}")
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/5.0/howto/static-files/
+
+# This setting informs Django of the URI path from which your static files will be served to users
+# Here, they well be accessible at your-domain.onrender.com/static/... or yourcustomdomain.com/static/...
+if not DEBUG:
+    # Tell Django to copy static assets into a path called `staticfiles` (this is specific to Render)
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+    #  Enable the WhiteNoise storage backend, which compresses static files to reduce disk use
+    # and renames the files with unique names for each version to support long-term caching
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'

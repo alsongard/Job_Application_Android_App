@@ -2,6 +2,7 @@ package com.example.myapplication.ui.theme
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -479,6 +480,7 @@ fun JobAPP(
     val userPasswd by viewModel::userPasswd
     val userConfirmPasswd by viewModel::userConfirmPasswd
     val toggleSignLoginBool by viewModel::signUpLogin
+    val jobUiState by viewModel::jobUiState
 
     NavHost(
         navController = navController,
@@ -500,7 +502,9 @@ fun JobAPP(
             )
         }
         composable(route = JobRoutes.JOBVIEW.name){
-            JobAppLayout()
+            JobAppLayout(
+                jobUiState = jobUiState
+            )
         }
     }
 

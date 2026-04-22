@@ -5,12 +5,14 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -49,10 +51,13 @@ import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.example.myapplication.R
 import com.example.myapplication.data.DataSource
+import com.example.myapplication.ui.theme.JobViewModel
 import com.example.myapplication.model.JobInfo
+import kotlinx.coroutines.Job
 
 
 @Composable
@@ -332,8 +337,11 @@ fun JobAppTopBar(
 }
 
 @Preview
+//@PreviewParameter
 @Composable
-fun MainAppPreviewLayout()
+fun MainAppPreviewLayout(
+    jobUiState: JobUiState = JobUiState.Loading
+)
 {
     var textFieldStat  = rememberTextFieldState()
     var items = listOf(
@@ -368,7 +376,40 @@ fun MainAppPreviewLayout()
 }
 
 @Composable
-fun JobAppLayout()
+fun LoadingScreen(modifier: Modifier)
+{
+    Image(
+        painter = painterResource(R.drawable.loading_img),
+        contentDescription = "loading",
+        modifier.size(200.dp)
+    )
+}
+
+@Composable
+fun ErrorScreen(modifier: Modifier)
+{
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.ic_connection_error),
+            contentDescription = ""
+        )
+        Text("Error loading job info")
+    }
+}
+
+@Composable
+fun JobInfoScreen(modifier: Modifier)
+{
+
+}
+@Composable
+fun JobAppLayout(
+    jobUiState: JobUiState
+)
 {
     var textFieldStat  = rememberTextFieldState()
     var items = listOf(
@@ -391,13 +432,26 @@ fun JobAppLayout()
             }
 
         }
-    ) {
-        LazyColumn(contentPadding = it) { //verticalArrangement = Arrangement.spacedBy(40.dp),
-            items(DataSource().loadJobInfo()) { job->
-                MainJobView(
-                    jobInfo = job
-                )
+    )
+    {
+        innerPadding  ->
+        Box (modifier =  Modifier.padding(innerPadding))
+        {
+            // when using is be carefull to check the types and not the data itself
+            when (jobUiState) {
+                is JobUiState.Loading -> LoadingScreen(modifier = Modifier.fillMaxWidth())
+                is JobUiState.Error -> ErrorScreen(modifier = Modifier.fillMaxWidth())
+                is JobUiState.Success -> {
+                    LazyColumn() { //verticalArrangement = Arrangement.spacedBy(40.dp),
+                        items(DataSource().loadJobInfo()) { job->
+                            MainJobView(
+                                jobInfo = job
+                            )
+                        }
+                    }
+                }
             }
         }
+
     }
 }
